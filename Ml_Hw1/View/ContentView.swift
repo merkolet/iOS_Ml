@@ -6,14 +6,19 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct ContentView: View {
-    @State private var result = ""
-    private let classifier = Classifier()
+    @StateObject private var viewModel = ClassifierViewModel()
 
     var body: some View {
         VStack(spacing: 20) {
+
+            Text("Домашнее задание №1")
+                .font(.title)
+                .fontWeight(.semibold)
+
+            
+            Text("Пример изображения")
 
             Image("test")
                 .resizable()
@@ -25,20 +30,11 @@ struct ContentView: View {
             Text("Результат:")
                 .font(.subheadline)
 
-            Text(result.isEmpty ? "—" : result)
+            Text(viewModel.result.isEmpty ? "—" : viewModel.result)
                 .font(.headline)
 
             Button("Классифицировать") {
-                guard let image = UIImage(named: "test") else {
-                    result = "No test image"
-                    return
-                }
-
-                classifier.classify(image) { out in
-                    DispatchQueue.main.async {
-                        result = out
-                    }
-                }
+                viewModel.classifyTestImage()
             }
         }
         .padding()
